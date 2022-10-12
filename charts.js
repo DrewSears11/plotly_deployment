@@ -60,59 +60,60 @@ function buildCharts(sample) {
     // 3. Create a variable that holds the samples array. 
     var samples = data.samples;
     // 4. Create a variable that filters the samples for the object with the desired sample number.
-    var resultArray = samples.filter(Obj => Obj.id == sample);
+    var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
     //  5. Create a variable that holds the first sample in the array.
     var result = resultArray[0];
 
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
-    var otuids = samples.filter("otu_ids");
-    var otulabels = samples.filter("otu_labels");
-    var samplevalues = samples.filter("sample_values");
+    var otuids = result.otuids;
+    var otulabels = result.otulabels;
+    var samplevalues = result.samplevalues;
 
     // 7. Create the yticks for the bar chart.
     // Hint: Get the the top 10 otu_ids and map them in descending order  
     //  so the otu_ids with the most bacteria are last. 
-    var xticks = samplevalues.slice(0,10).reverse();
-    var yticks = otuids.slice(0,10).map().reverse();
-    var labels = otulabels.slice(0,10).reverse():
-
+    
+    var yticks = otuids.slice(0, 10).map(otuID => 'OTU ${otuID}').reverse();
+    
     // 8. Create the trace for the bar chart. 
     var barData = [
-      x: xticks,
-      y: yticks,
-      type: 'bar'
-      text: labels
-    
+      {
+        y: yticks,
+        x: samplevalues.slice(0, 10).reverse(),
+        text: otulabels.slice(0, 10).reverse(),
+        type: "bar",
+        orientation: "h",
+       }
     ];
     // 9. Create the layout for the bar chart. 
     var barLayout = {
         title: "Top 10 Bacteria Cultures Found",
-        
+        margin: { t: 30, l: 150 }
       };
-      };
+      
     // 10. Use Plotly to plot the data with the layout. 
-    Plotly.newPlot("bar", [barData], barLayout);
+    Plotly.newPlot("bar", barData, barLayout);
   });
   }
 
-   // 1. Create the trace for the bubble chart.
-   var bubbleData = [
-    x: otuids
-    y: samplevalues
-    text: otulabels
-    mode: 'markers'
+//    // 1. Create the trace for the bubble chart.
+//    var bubbleData = [{
+//     x: otuids,
+//     y: samplevalues,
+//     text: otulabels,
+//     mode: 'markers',
    
- 
-  ];
+//    }
+//   ];
 
-  // 2. Create the layout for the bubble chart.
-  var bubbleLayout = { 
-      title: 'Bacteria Cultures per Sample'
+//   // 2. Create the layout for the bubble chart.
+//   var bubbleLayout = { 
+//       title: 'Bacteria Cultures per Sample'
       
     
-  };
+//   };
 
-  // 3. Use Plotly to plot the data with the layout.
-  Plotly.newPlot('myDiv', bubbleData, bubbleLayout); 
-});
-}
+//   // 3. Use Plotly to plot the data with the layout.
+//   Plotly.newPlot('myDiv', bubbleData, bubbleLayout); 
+// });
+// }
